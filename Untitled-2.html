@@ -1,0 +1,1492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ByteSpace | Computer Systems</title>
+
+    <style>
+        /* =========================
+           GLOBAL
+        ========================= */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: "Courier New", monospace;
+            background: #12091c;
+            color: #f7eaff;
+            line-height: 1.6;
+        }
+
+        /* Pixel-style selection */
+        ::selection {
+            background: #ff4fd8;
+            color: #12091c;
+        }
+
+        /* =========================
+           SIDEBAR
+        ========================= */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 250px;
+            height: 100vh;
+            background: #1b0d29;
+            border-right: 3px solid #7b2cbf;
+            padding: 25px 18px;
+            z-index: 100;
+        }
+
+        .logo {
+            text-align: center;
+            padding: 15px 10px;
+            margin-bottom: 35px;
+            border: 2px solid #ff4fd8;
+            background: #241038;
+            box-shadow: 5px 5px 0 #7b2cbf;
+        }
+
+        .logo h1 {
+            color: #ff4fd8;
+            font-size: 22px;
+            letter-spacing: 2px;
+        }
+
+        .logo p {
+            font-size: 11px;
+            color: #cfa9e8;
+            margin-top: 5px;
+        }
+
+        .menu-title {
+            color: #a855f7;
+            font-size: 11px;
+            margin: 20px 8px 10px;
+            letter-spacing: 2px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+        }
+
+        .sidebar li {
+            margin-bottom: 8px;
+        }
+
+        .sidebar a {
+            display: block;
+            text-decoration: none;
+            color: #d9c2e9;
+            padding: 11px 12px;
+            border-left: 3px solid transparent;
+            transition: 0.2s;
+            font-size: 13px;
+        }
+
+        .sidebar a:hover {
+            background: #2a123d;
+            color: #ff7ce5;
+            border-left: 3px solid #ff4fd8;
+            padding-left: 18px;
+        }
+
+        .sidebar .active {
+            background: #35134e;
+            color: #ff4fd8;
+            border-left: 3px solid #ff4fd8;
+        }
+
+        .status {
+            position: absolute;
+            bottom: 20px;
+            left: 18px;
+            right: 18px;
+            border-top: 1px solid #542078;
+            padding-top: 15px;
+            font-size: 10px;
+            color: #9d7bb5;
+        }
+
+        .status span {
+            color: #ff4fd8;
+        }
+
+        /* =========================
+           MAIN
+        ========================= */
+
+        main {
+            margin-left: 250px;
+            min-height: 100vh;
+        }
+
+        /* =========================
+           TOP BAR
+        ========================= */
+
+        .topbar {
+            height: 65px;
+            background: #170b22;
+            border-bottom: 2px solid #42205a;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 40px;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .breadcrumb {
+            font-size: 12px;
+            color: #9d7bb5;
+        }
+
+        .breadcrumb span {
+            color: #ff4fd8;
+        }
+
+        .student-tag {
+            border: 1px solid #7b2cbf;
+            padding: 6px 12px;
+            font-size: 10px;
+            color: #dcb9f3;
+            background: #21102e;
+        }
+
+        /* =========================
+           HERO
+        ========================= */
+
+        .hero {
+            min-height: 450px;
+            padding: 80px 60px;
+            display: flex;
+            align-items: center;
+            background:
+                linear-gradient(rgba(18, 9, 28, 0.88), rgba(18, 9, 28, 0.94)),
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 3px,
+                    rgba(255, 79, 216, 0.025) 3px,
+                    rgba(255, 79, 216, 0.025) 6px
+                );
+            border-bottom: 2px solid #42205a;
+        }
+
+        .hero-content {
+            max-width: 850px;
+        }
+
+        .pixel-label {
+            display: inline-block;
+            padding: 7px 12px;
+            background: #7b2cbf;
+            color: white;
+            font-size: 10px;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            box-shadow: 4px 4px 0 #ff4fd8;
+        }
+
+        .hero h2 {
+            font-size: clamp(35px, 6vw, 70px);
+            line-height: 1;
+            color: #ffffff;
+            text-shadow: 4px 4px 0 #7b2cbf;
+            margin-bottom: 25px;
+        }
+
+        .hero h2 span {
+            color: #ff4fd8;
+        }
+
+        .hero p {
+            max-width: 700px;
+            color: #cdb5dc;
+            font-size: 15px;
+        }
+
+        .hero-buttons {
+            margin-top: 30px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .hero-btn {
+            text-decoration: none;
+            color: white;
+            background: #7b2cbf;
+            padding: 12px 20px;
+            border: 2px solid #a855f7;
+            box-shadow: 4px 4px 0 #ff4fd8;
+            font-size: 12px;
+            transition: 0.2s;
+        }
+
+        .hero-btn:hover {
+            transform: translate(3px, 3px);
+            box-shadow: 1px 1px 0 #ff4fd8;
+            background: #9d36d8;
+        }
+
+        .hero-btn.secondary {
+            background: transparent;
+            border-color: #ff4fd8;
+            box-shadow: 4px 4px 0 #7b2cbf;
+        }
+
+        /* =========================
+           CONTENT
+        ========================= */
+
+        .content {
+            padding: 70px 55px;
+        }
+
+        .section {
+            max-width: 1100px;
+            margin: 0 auto 80px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 35px;
+        }
+
+        .section-number {
+            color: #12091c;
+            background: #ff4fd8;
+            padding: 7px 10px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .section-header h2 {
+            font-size: 28px;
+            color: #ffffff;
+        }
+
+        .section-header p {
+            color: #a989b8;
+            font-size: 12px;
+            margin-left: auto;
+        }
+
+        /* =========================
+           COMPUTER SYSTEM LESSON
+        ========================= */
+
+        .lesson-window {
+            background: #1a0d26;
+            border: 2px solid #64258c;
+            box-shadow: 8px 8px 0 #0b0610;
+        }
+
+        .window-top {
+            height: 42px;
+            background: #261035;
+            border-bottom: 2px solid #64258c;
+            display: flex;
+            align-items: center;
+            padding: 0 15px;
+        }
+
+        .window-dots {
+            display: flex;
+            gap: 7px;
+        }
+
+        .window-dots span {
+            width: 10px;
+            height: 10px;
+            display: block;
+            background: #ff4fd8;
+        }
+
+        .window-dots span:nth-child(2) {
+            background: #a855f7;
+        }
+
+        .window-dots span:nth-child(3) {
+            background: #63258a;
+        }
+
+        .window-title {
+            margin-left: 15px;
+            color: #b994cb;
+            font-size: 11px;
+        }
+
+        .lesson-body {
+            display: grid;
+            grid-template-columns: 220px 1fr;
+            min-height: 420px;
+        }
+
+        .lesson-menu {
+            border-right: 2px solid #3b1b4f;
+            padding: 20px 0;
+            background: #160b21;
+        }
+
+        .lesson-menu h4 {
+            font-size: 10px;
+            color: #ff4fd8;
+            padding: 0 18px 15px;
+            letter-spacing: 2px;
+        }
+
+        .lesson-menu a {
+            display: block;
+            color: #a990b7;
+            text-decoration: none;
+            padding: 11px 18px;
+            font-size: 11px;
+            border-left: 3px solid transparent;
+        }
+
+        .lesson-menu a:hover {
+            background: #261035;
+            color: #ffffff;
+            border-left-color: #ff4fd8;
+        }
+
+        .lesson-menu .selected {
+            background: #321344;
+            color: #ff4fd8;
+            border-left-color: #ff4fd8;
+        }
+
+        .lesson-content {
+            padding: 35px;
+        }
+
+        .lesson-content .small-label {
+            color: #a855f7;
+            font-size: 10px;
+            letter-spacing: 2px;
+        }
+
+        .lesson-content h3 {
+            font-size: 30px;
+            margin: 8px 0 15px;
+            color: white;
+        }
+
+        .lesson-content > p {
+            color: #c7aecf;
+            font-size: 13px;
+            max-width: 700px;
+            margin-bottom: 30px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .info-box {
+            padding: 18px;
+            background: #21102e;
+            border: 1px solid #4c2265;
+        }
+
+        .info-box h4 {
+            color: #ff6bdd;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .info-box p {
+            color: #a990b7;
+            font-size: 11px;
+        }
+
+        /* =========================
+           COMPONENTS
+        ========================= */
+
+        .component-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+        }
+
+        .component-card {
+            background: #1b0d29;
+            border: 2px solid #45205b;
+            padding: 25px;
+            position: relative;
+            transition: 0.2s;
+        }
+
+        .component-card:hover {
+            border-color: #ff4fd8;
+            transform: translateY(-5px);
+            box-shadow: 5px 5px 0 #7b2cbf;
+        }
+
+        .component-id {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            font-size: 9px;
+            color: #75478d;
+        }
+
+        .component-icon {
+            font-size: 32px;
+            margin-bottom: 15px;
+        }
+
+        .component-card h3 {
+            color: #ffffff;
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+
+        .component-card p {
+            color: #a990b7;
+            font-size: 11px;
+        }
+
+        .component-card .type {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 4px 8px;
+            background: #321344;
+            color: #ff62da;
+            font-size: 9px;
+        }
+
+        /* =========================
+           SYSTEM FLOW
+        ========================= */
+
+        .flow-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0;
+        }
+
+        .flow-item {
+            padding: 30px 20px;
+            text-align: center;
+            background: #1b0d29;
+            border-top: 2px solid #7b2cbf;
+            border-bottom: 2px solid #45205b;
+            position: relative;
+        }
+
+        .flow-item:not(:last-child)::after {
+            content: "→";
+            position: absolute;
+            right: -12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #ff4fd8;
+            font-size: 20px;
+            z-index: 2;
+        }
+
+        .flow-number {
+            color: #ff4fd8;
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
+
+        .flow-item h3 {
+            color: white;
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        .flow-item p {
+            color: #9f83ac;
+            font-size: 10px;
+        }
+
+        /* =========================
+           HARDWARE / SOFTWARE
+        ========================= */
+
+        .compare {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .compare-box {
+            padding: 30px;
+            border: 2px solid #542071;
+            background: #1a0d26;
+        }
+
+        .compare-box.hardware {
+            border-top: 5px solid #ff4fd8;
+        }
+
+        .compare-box.software {
+            border-top: 5px solid #a855f7;
+        }
+
+        .compare-box h3 {
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+
+        .compare-box.hardware h3 {
+            color: #ff5fda;
+        }
+
+        .compare-box.software h3 {
+            color: #b76aff;
+        }
+
+        .compare-box p {
+            color: #b69dc0;
+            font-size: 12px;
+            margin-bottom: 15px;
+        }
+
+        .compare-box ul {
+            list-style: none;
+        }
+
+        .compare-box li {
+            padding: 7px 0;
+            border-bottom: 1px dashed #3e214d;
+            font-size: 11px;
+            color: #d7c4dd;
+        }
+
+        .compare-box li::before {
+            content: "▸ ";
+            color: #ff4fd8;
+        }
+
+        /* =========================
+           KEY TERMS
+        ========================= */
+
+        .terms {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+
+        .term {
+            background: #21102e;
+            padding: 20px;
+            border: 1px solid #48205e;
+        }
+
+        .term strong {
+            display: block;
+            color: #ff62dc;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .term span {
+            color: #9f83ac;
+            font-size: 10px;
+        }
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        footer {
+            margin-left: 250px;
+            background: #0d0613;
+            border-top: 2px solid #42205a;
+            padding: 35px 50px;
+            text-align: center;
+        }
+
+        footer h3 {
+            color: #ff4fd8;
+            margin-bottom: 8px;
+        }
+
+        footer p {
+            color: #72587d;
+            font-size: 10px;
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 950px) {
+
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+                border-right: none;
+                border-bottom: 3px solid #7b2cbf;
+            }
+
+            .status {
+                display: none;
+            }
+
+            main,
+            footer {
+                margin-left: 0;
+            }
+
+            .sidebar ul {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 5px;
+            }
+
+            .sidebar li {
+                margin: 0;
+            }
+
+            .component-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .terms {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 650px) {
+
+            .topbar {
+                padding: 0 15px;
+            }
+
+            .hero {
+                padding: 60px 25px;
+            }
+
+            .content {
+                padding: 50px 20px;
+            }
+
+            .lesson-body {
+                grid-template-columns: 1fr;
+            }
+
+            .lesson-menu {
+                border-right: none;
+                border-bottom: 2px solid #3b1b4f;
+            }
+
+            .component-grid,
+            .compare,
+            .terms {
+                grid-template-columns: 1fr;
+            }
+
+            .flow-container {
+                grid-template-columns: 1fr;
+            }
+
+            .flow-item:not(:last-child)::after {
+                content: "↓";
+                right: 50%;
+                top: auto;
+                bottom: -15px;
+                transform: translateX(50%);
+            }
+
+            .section-header {
+                display: block;
+            }
+
+            .section-header p {
+                margin-top: 8px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- =========================
+         SIDEBAR
+    ========================= -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            <h1>BYTE//SPACE</h1>
+            <p>IT LEARNING HUB</p>
+        </div>
+
+        <div class="menu-title">MAIN MENU</div>
+
+        <ul>
+            <li>
+                <a href="#home" class="active">⌂ &nbsp; Dashboard</a>
+            </li>
+
+            <li>
+                <a href="#system">▣ &nbsp; Computer Systems</a>
+            </li>
+
+            <li>
+                <a href="#components">▦ &nbsp; Components</a>
+            </li>
+
+            <li>
+                <a href="#process">↻ &nbsp; System Process</a>
+            </li>
+
+            <li>
+                <a href="#hardware">◇ &nbsp; Hardware & Software</a>
+            </li>
+
+            <li>
+                <a href="#terms">? &nbsp; Key Terms</a>
+            </li>
+        </ul>
+
+        <div class="menu-title">COURSE</div>
+
+        <ul>
+            <li>
+                <a href="#system">Introduction to IT</a>
+            </li>
+        </ul>
+
+        <div class="status">
+            SYSTEM STATUS:
+            <span>● ONLINE</span>
+            <br><br>
+            MODULE 01 / COMPUTER FUNDAMENTALS
+        </div>
+
+    </aside>
+
+
+    <!-- =========================
+         MAIN
+    ========================= -->
+
+    <main>
+
+        <!-- TOP BAR -->
+
+        <header class="topbar">
+
+            <div class="breadcrumb">
+                BYTE//SPACE / <span>COMPUTER FUNDAMENTALS</span>
+            </div>
+
+            <div class="student-tag">
+                BSIT • MODULE 01
+            </div>
+
+        </header>
+
+
+        <!-- =========================
+             HERO
+        ========================= -->
+
+        <section class="hero" id="home">
+
+            <div class="hero-content">
+
+                <div class="pixel-label">
+                    [ SYSTEM_INITIALIZED ]
+                </div>
+
+                <h2>
+                    COMPUTER<br>
+                    <span>SYSTEMS</span>
+                    & COMPONENTS
+                </h2>
+
+                <p>
+                    A beginner-friendly IT learning module that introduces
+                    the basic structure of computer systems, their major
+                    hardware components, and how they work together to
+                    process information.
+                </p>
+
+                <div class="hero-buttons">
+
+                    <a href="#system" class="hero-btn">
+                        START MODULE →
+                    </a>
+
+                    <a href="#components" class="hero-btn secondary">
+                        VIEW COMPONENTS
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             CONTENT
+        ========================= -->
+
+        <div class="content">
+
+
+            <!-- COMPUTER SYSTEM LESSON -->
+
+            <section class="section" id="system">
+
+                <div class="section-header">
+
+                    <div class="section-number">01</div>
+
+                    <div>
+                        <h2>Computer System</h2>
+                    </div>
+
+                    <p>INTRODUCTION</p>
+
+                </div>
+
+
+                <div class="lesson-window">
+
+                    <div class="window-top">
+
+                        <div class="window-dots">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+
+                        <div class="window-title">
+                            computer_systems.exe
+                        </div>
+
+                    </div>
+
+
+                    <div class="lesson-body">
+
+                        <!-- LESSON MENU -->
+
+                        <div class="lesson-menu">
+
+                            <h4>LESSON INDEX</h4>
+
+                            <a href="#system" class="selected">
+                                01 / Overview
+                            </a>
+
+                            <a href="#components">
+                                02 / Components
+                            </a>
+
+                            <a href="#process">
+                                03 / Data Flow
+                            </a>
+
+                            <a href="#hardware">
+                                04 / Hardware
+                            </a>
+
+                            <a href="#hardware">
+                                05 / Software
+                            </a>
+
+                        </div>
+
+
+                        <!-- LESSON CONTENT -->
+
+                        <div class="lesson-content">
+
+                            <div class="small-label">
+                                MODULE 01 // OVERVIEW
+                            </div>
+
+                            <h3>What is a Computer System?</h3>
+
+                            <p>
+                                A computer system is a complete setup that
+                                combines hardware and software to receive,
+                                process, store, and produce information.
+                                These elements work together to perform
+                                different computing tasks.
+                            </p>
+
+
+                            <div class="info-grid">
+
+                                <div class="info-box">
+                                    <h4>01 — Input</h4>
+
+                                    <p>
+                                        Data or instructions are entered
+                                        into the system through input
+                                        devices such as keyboards,
+                                        mice, and scanners.
+                                    </p>
+                                </div>
+
+
+                                <div class="info-box">
+                                    <h4>02 — Processing</h4>
+
+                                    <p>
+                                        The processor interprets
+                                        instructions and performs the
+                                        calculations needed to handle
+                                        the input data.
+                                    </p>
+                                </div>
+
+
+                                <div class="info-box">
+                                    <h4>03 — Output</h4>
+
+                                    <p>
+                                        Processed information is presented
+                                        to the user through output devices
+                                        such as monitors and speakers.
+                                    </p>
+                                </div>
+
+
+                                <div class="info-box">
+                                    <h4>04 — Storage</h4>
+
+                                    <p>
+                                        Data and files can be stored for
+                                        future access using storage
+                                        devices such as SSDs and HDDs.
+                                    </p>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- COMPONENTS -->
+
+            <section class="section" id="components">
+
+                <div class="section-header">
+
+                    <div class="section-number">02</div>
+
+                    <div>
+                        <h2>System Components</h2>
+                    </div>
+
+                    <p>HARDWARE</p>
+
+                </div>
+
+
+                <div class="component-grid">
+
+
+                    <article class="component-card">
+
+                        <div class="component-id">
+                            CMP_001
+                        </div>
+
+                        <div class="component-icon">🧠</div>
+
+                        <h3>CPU</h3>
+
+                        <p>
+                            The Central Processing Unit executes
+                            instructions and performs calculations
+                            required by computer programs.
+                        </p>
+
+                        <span class="type">
+                            PROCESSING
+                        </span>
+
+                    </article>
+
+
+                    <article class="component-card">
+
+                        <div class="component-id">
+                            CMP_002
+                        </div>
+
+                        <div class="component-icon">⚡</div>
+
+                        <h3>RAM</h3>
+
+                        <p>
+                            Random Access Memory temporarily holds
+                            data and instructions that the computer
+                            is actively using.
+                        </p>
+
+                        <span class="type">
+                            MEMORY
+                        </span>
+
+                    </article>
+
+
+                    <article class="component-card">
+
+                        <div class="component-id">
+                            CMP_003
+                        </div>
+
+                        <div class="component-icon">💾</div>
+
+                        <h3>Storage</h3>
+
+                        <p>
+                            SSDs and HDDs provide long-term storage
+                            for operating systems, applications,
+                            documents, and other files.
+                        </p>
+
+                        <span class="type">
+                            STORAGE
+                        </span>
+
+                    </article>
+
+
+                    <article class="component-card">
+
+                        <div class="component-id">
+                            CMP_004
+                        </div>
+
+                        <div class="component-icon">🎮</div>
+
+                        <h3>GPU</h3>
+
+                        <p>
+                            A Graphics Processing Unit handles
+                            graphics and visual computations for
+                            displays and applications.
+                        </p>
+
+                        <span class="type">
+                            GRAPHICS
+                        </span>
+
+                    </article>
+
+
+                    <article class="component-card">
+
+                        <div class="component-id">
+                            CMP_005
+                        </div>
+
+                        <div class="component-icon">🔌</div>
+
+                        <h3>Power Supply</h3>
+
+                        <p>
+                            The PSU converts electrical power into
+                            suitable power for the computer's
+                            internal components.
+                        </p>
+
+                        <span class="type">
+                            POWER
+                        </span>
+
+                    </article>
+
+
+                    <article class="component-card">
+
+                        <div class="component-id">
+                            CMP_006
+                        </div>
+
+                        <div class="component-icon">🧩</div>
+
+                        <h3>Motherboard</h3>
+
+                        <p>
+                            The main circuit board that provides
+                            connections between many of the
+                            computer's components.
+                        </p>
+
+                        <span class="type">
+                            MAINBOARD
+                        </span>
+
+                    </article>
+
+
+                    <article class="component-card">
+
+                        <div class="component-id">
+                            CMP_007
+                        </div>
+
+                        <div class="component-icon">⌨️</div>
+
+                        <h3>Keyboard</h3>
+
+                        <p>
+                            An input device used to enter text,
+                            commands, numbers, and other information.
+                        </p>
+
+                        <span class="type">
+                            INPUT
+                        </span>
+
+                    </article>
+
+
+                    <article class="component-card">
+
+                        <div class="component-id">
+                            CMP_008
+                        </div>
+
+                        <div class="component-icon">🖱️</div>
+
+                        <h3>Mouse</h3>
+
+                        <p>
+                            An input device used to move the pointer
+                            and interact with graphical elements.
+                        </p>
+
+                        <span class="type">
+                            INPUT
+                        </span>
+
+                    </article>
+
+
+                    <article class="component-card">
+
+                        <div class="component-id">
+                            CMP_009
+                        </div>
+
+                        <div class="component-icon">🖥️</div>
+
+                        <h3>Monitor</h3>
+
+                        <p>
+                            An output device that displays text,
+                            images, interfaces, videos, and other
+                            visual information.
+                        </p>
+
+                        <span class="type">
+                            OUTPUT
+                        </span>
+
+                    </article>
+
+
+                </div>
+
+            </section>
+
+
+            <!-- SYSTEM PROCESS -->
+
+            <section class="section" id="process">
+
+                <div class="section-header">
+
+                    <div class="section-number">03</div>
+
+                    <div>
+                        <h2>How a Computer Works</h2>
+                    </div>
+
+                    <p>DATA FLOW</p>
+
+                </div>
+
+
+                <div class="flow-container">
+
+                    <div class="flow-item">
+
+                        <div class="flow-number">
+                            STEP_01
+                        </div>
+
+                        <h3>INPUT</h3>
+
+                        <p>
+                            Raw data enters the computer through
+                            an input device.
+                        </p>
+
+                    </div>
+
+
+                    <div class="flow-item">
+
+                        <div class="flow-number">
+                            STEP_02
+                        </div>
+
+                        <h3>PROCESS</h3>
+
+                        <p>
+                            The CPU processes the data according
+                            to programmed instructions.
+                        </p>
+
+                    </div>
+
+
+                    <div class="flow-item">
+
+                        <div class="flow-number">
+                            STEP_03
+                        </div>
+
+                        <h3>OUTPUT</h3>
+
+                        <p>
+                            The system presents the processed
+                            information to the user.
+                        </p>
+
+                    </div>
+
+
+                    <div class="flow-item">
+
+                        <div class="flow-number">
+                            STEP_04
+                        </div>
+
+                        <h3>STORAGE</h3>
+
+                        <p>
+                            Important data can be saved and
+                            retrieved later.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- HARDWARE VS SOFTWARE -->
+
+            <section class="section" id="hardware">
+
+                <div class="section-header">
+
+                    <div class="section-number">04</div>
+
+                    <div>
+                        <h2>Hardware vs Software</h2>
+                    </div>
+
+                    <p>CORE CONCEPT</p>
+
+                </div>
+
+
+                <div class="compare">
+
+
+                    <div class="compare-box hardware">
+
+                        <h3>Hardware</h3>
+
+                        <p>
+                            The physical components of a computer
+                            system that can be physically touched.
+                        </p>
+
+                        <ul>
+                            <li>CPU</li>
+                            <li>RAM</li>
+                            <li>Motherboard</li>
+                            <li>SSD / HDD</li>
+                            <li>Keyboard</li>
+                            <li>Mouse</li>
+                            <li>Monitor</li>
+                            <li>Power Supply</li>
+                        </ul>
+
+                    </div>
+
+
+                    <div class="compare-box software">
+
+                        <h3>Software</h3>
+
+                        <p>
+                            Programs and instructions that tell
+                            computer hardware what tasks to perform.
+                        </p>
+
+                        <ul>
+                            <li>Operating Systems</li>
+                            <li>Web Browsers</li>
+                            <li>Text Editors</li>
+                            <li>Programming Tools</li>
+                            <li>Games</li>
+                            <li>Media Applications</li>
+                            <li>Office Applications</li>
+                            <li>Utility Programs</li>
+                        </ul>
+
+                    </div>
+
+
+                </div>
+
+            </section>
+
+
+            <!-- KEY TERMS -->
+
+            <section class="section" id="terms">
+
+                <div class="section-header">
+
+                    <div class="section-number">05</div>
+
+                    <div>
+                        <h2>Key Terms</h2>
+                    </div>
+
+                    <p>QUICK REVIEW</p>
+
+                </div>
+
+
+                <div class="terms">
+
+                    <div class="term">
+                        <strong>CPU</strong>
+                        <span>
+                            Executes instructions and processes data.
+                        </span>
+                    </div>
+
+                    <div class="term">
+                        <strong>RAM</strong>
+                        <span>
+                            Temporary working memory used by active programs.
+                        </span>
+                    </div>
+
+                    <div class="term">
+                        <strong>Storage</strong>
+                        <span>
+                            Keeps files and data for long-term use.
+                        </span>
+                    </div>
+
+                    <div class="term">
+                        <strong>Motherboard</strong>
+                        <span>
+                            Main board connecting computer components.
+                        </span>
+                    </div>
+
+                    <div class="term">
+                        <strong>Input</strong>
+                        <span>
+                            Data or commands entered into a system.
+                        </span>
+                    </div>
+
+                    <div class="term">
+                        <strong>Output</strong>
+                        <span>
+                            Information produced by the computer.
+                        </span>
+                    </div>
+
+                    <div class="term">
+                        <strong>Hardware</strong>
+                        <span>
+                            Physical parts of a computer.
+                        </span>
+                    </div>
+
+                    <div class="term">
+                        <strong>Software</strong>
+                        <span>
+                            Programs and instructions used by a computer.
+                        </span>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+        </div>
+
+    </main>
+
+
+    <!-- FOOTER -->
+
+    <footer>
+
+        <h3>BYTE//SPACE</h3>
+
+        <p>
+            Computer Systems & Components Learning Module
+        </p>
+
+        <p>
+            BSIT • Computer Fundamentals • 2026
+        </p>
+
+    </footer>
+
+</body>
+</html>
